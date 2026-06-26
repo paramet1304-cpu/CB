@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบประเมินสมรรถนะ CB — กลุ่มงานวิจัยและบริการ | วว. 2569</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ─── CONFIG ─────────────────────────────────────────── */
+    :root {
+      --primary:    #0F3460;
+      --primary-lt: #1A5276;
+      --accent:     #17A589;
+      --accent-lt:  #1ABC9C;
+      --bg:         #EEF2F7;
+      --card:       #FFFFFF;
+      --border:     #D5E0EE;
+      --text:       #1C2B3A;
+      --text-sm:    #566B7E;
+      --gap-pos:    #1E8449;
+      --gap-neg:    #C0392B;
+      --gap-zero:   #2980B9;
+      --badge-cb:   #17A589;
+    }
+
+    /* ─── RESET & BASE ───────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Sarabun', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────── */
+    .top-bar {
+      background: var(--primary);
+      color: #fff;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 60px;
+    }
+    .top-bar .org { font-size: 13px; opacity: .7; }
+    .top-bar .title { font-size: 16px; font-weight: 600; flex: 1; }
+    .badge-cb {
+      background: var(--badge-cb);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+
+    /* ─── PAGE WRAPPER ───────────────────────────────────── */
+    .page { max-width: 1400px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    /* ─── CARD ───────────────────────────────────────────── */
+    .card {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* ─── PURPOSE BLOCK ──────────────────────────────────── */
+    .purpose-block {
+      background: #F0FAF7;
+      border: 1px solid #A9DFBF;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 13.5px;
+      color: #1E5631;
+      margin-bottom: 14px;
+      line-height: 1.8;
+    }
+    .purpose-block strong { display: block; font-size: 14px; margin-bottom: 6px; color: #0E6655; }
+
+    /* ─── SCALE LEGEND ───────────────────────────────────── */
+    .scale-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .scale-item {
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+    .s1 { background: #FDFEFE; border: 1px solid #D5D8DC; }
+    .s2 { background: #EBF5FB; border: 1px solid #AED6F1; }
+    .s3 { background: #E8F8F5; border: 1px solid #A2D9CE; }
+    .s4 { background: #E9F7EF; border: 1px solid #A9DFBF; }
+    .scale-item .num {
+      font-size: 22px;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .s1 .num { color: #909497; }
+    .s2 .num { color: #2E86C1; }
+    .s3 .num { color: #17A589; }
+    .s4 .num { color: #1E8449; }
+    .scale-item .lv { font-weight: 600; font-size: 13px; }
+    .scale-item .desc { font-size: 12px; color: var(--text-sm); margin-top: 2px; }
+
+    /* ─── META FIELDS ────────────────────────────────────── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-sm);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px;
+    }
+    .field input {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      transition: border-color .2s;
+      outline: none;
+    }
+    .field input:focus { border-color: var(--accent); }
+    .field input::placeholder { color: #B0BEC5; }
+
+    /* ─── COMPETENCY REF ─────────────────────────────────── */
+    .comp-ref-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      background: none;
+      border: 1.5px solid var(--primary);
+      border-radius: 6px;
+      padding: 7px 14px;
+      margin-bottom: 16px;
+      transition: background .2s;
+    }
+    .comp-ref-toggle:hover { background: #EBF5FB; }
+    .comp-ref { display: none; }
+    .comp-ref.open { display: block; }
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      margin-top: 10px;
+    }
+    .comp-table th {
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .comp-table td {
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    .comp-table tr:nth-child(even) td { background: #F8FBFF; }
+    .comp-name { font-weight: 600; color: var(--primary); }
+    .comp-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    /* ─── EMPLOYEE TABLE ─────────────────────────────────── */
+    .table-wrapper { overflow-x: auto; }
+
+    .emp-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+      min-width: 1100px;
+    }
+    .emp-table thead th {
+      background: var(--primary);
+      color: #fff;
+      padding: 11px 10px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .emp-table thead th:first-child { border-radius: 8px 0 0 0; }
+    .emp-table thead th:last-child  { border-radius: 0 8px 0 0; }
+    .emp-table thead th.comp-header { background: var(--primary-lt); }
+    .emp-table thead th.gap-header  { background: #0A2744; font-size: 11px; }
+
+    .emp-table tbody tr { transition: background .1s; }
+    .emp-table tbody tr:hover td { background: #F0F8FF; }
+    .emp-table tbody td {
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 8px 8px;
+      vertical-align: middle;
+    }
+    .emp-table tbody td:first-child { border-left: 1px solid var(--border); }
+
+    .emp-table input[type="text"] {
+      width: 100%;
+      border: 1.5px solid transparent;
+      border-radius: 5px;
+      padding: 7px 9px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #F8FAFC;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s, background .15s;
+    }
+    .emp-table input[type="text"]:focus {
+      border-color: var(--accent);
+      background: #fff;
+    }
+
+    .emp-table select {
+      width: 100%;
+      border: 1.5px solid transparent;
+      border-radius: 5px;
+      padding: 7px 4px;
+      font-size: 12.5px;
+      font-family: inherit;
+      background: #F8FAFC;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+      transition: border-color .15s;
+    }
+    .emp-table select:focus { border-color: var(--accent); background: #fff; }
+
+    .gap-cell {
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 5px;
+      padding: 5px 8px;
+      min-width: 42px;
+    }
+    .gap-pos  { color: var(--gap-pos); }
+    .gap-neg  { color: var(--gap-neg); }
+    .gap-zero { color: var(--gap-zero); }
+    .gap-na   { color: #BDC3C7; font-size: 11px; font-weight: 400; }
+
+    .row-num {
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-sm);
+      font-size: 13px;
+    }
+
+    .btn-del {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #C0392B;
+      font-size: 16px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background .15s;
+    }
+    .btn-del:hover { background: #FADBD8; }
+
+    /* ─── TABLE ACTIONS ──────────────────────────────────── */
+    .table-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .btn-add {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 9px 18px;
+      font-size: 13.5px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-add:hover { background: #148F77; }
+    .row-count { font-size: 13px; color: var(--text-sm); }
+
+    /* ─── SUBMIT SECTION ─────────────────────────────────── */
+    .submit-section {
+      text-align: center;
+      padding: 12px 0;
+    }
+    .btn-submit {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      padding: 14px 48px;
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+      box-shadow: 0 3px 10px rgba(15,52,96,.25);
+    }
+    .btn-submit:hover { background: var(--primary-lt); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { background: #95A5A6; cursor: not-allowed; transform: none; }
+    .submit-note { font-size: 12px; color: var(--text-sm); margin-top: 10px; }
+
+    /* ─── TOAST / STATUS ─────────────────────────────────── */
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 14px 28px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(0,0,0,.18);
+      z-index: 999;
+      animation: slideUp .3s ease;
+    }
+    .toast.success { background: #1E8449; color: #fff; }
+    .toast.error   { background: #C0392B; color: #fff; }
+    .toast.info    { background: var(--primary); color: #fff; }
+    @keyframes slideUp { from { opacity:0; transform:translateX(-50%) translateY(12px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+
+    /* ─── SPINNER ────────────────────────────────────────── */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── SUCCESS OVERLAY ────────────────────────────────── */
+    .success-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,52,96,.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .success-overlay.show { display: flex; }
+    .success-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 48px 56px;
+      text-align: center;
+      max-width: 420px;
+    }
+    .success-icon { font-size: 56px; margin-bottom: 16px; }
+    .success-box h2 { font-size: 22px; color: var(--primary); margin-bottom: 10px; }
+    .success-box p  { font-size: 14px; color: var(--text-sm); line-height: 1.7; }
+    .btn-another {
+      margin-top: 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 28px;
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-another:hover { background: #148F77; }
+
+    /* ─── SETUP WARNING ──────────────────────────────────── */
+    .setup-warn {
+      background: #FEF9E7;
+      border: 1.5px solid #F0B429;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      color: #7D6608;
+      margin-bottom: 20px;
+    }
+    .setup-warn strong { color: #B7770D; }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-sm);
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────── -->
+<div class="top-bar">
+  <div>
+    <div class="org">สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย (วว.)</div>
+    <div class="title">แบบประเมินสมรรถนะประจำตำแหน่งสำหรับลูกจ้าง วว. — ประจำปี 2569</div>
+  </div>
+  <span class="badge-cb">Core Business (CB)</span>
+</div>
+
+<!-- ── PAGE ────────────────────────────────────────────── -->
+<div class="page">
+
+  <!-- Setup Warning (hidden after config) -->
+  <div class="setup-warn" id="setupWarn">
+    ⚠️ <strong>กรุณา Setup ก่อนใช้งาน:</strong>
+    เปิดไฟล์ HTML นี้ด้วย Text Editor แล้วแก้ไขค่า <code>APPS_SCRIPT_URL</code>
+    ในส่วน &lt;script&gt; ให้ตรงกับ URL ของ Google Apps Script ที่ Deploy แล้ว
+    (ดูรายละเอียดใน <strong>README.md</strong>)
+  </div>
+
+  <!-- 1. คำชี้แจง -->
+  <div class="card">
+    <div class="card-title">📋 คำชี้แจงและคำอธิบาย</div>
+    <div class="purpose-block">
+      <strong>วัตถุประสงค์</strong>
+      แบบประเมินชุดนี้ใช้ประเมินสมรรถนะประจำตำแหน่งของลูกจ้าง วว.
+      <strong>กลุ่มงานวิจัยและบริการ (Core Business)</strong>
+      เพื่อวิเคราะห์ช่องว่างสมรรถนะ (Competency Gap) สำหรับวางแผนพัฒนาลูกจ้าง วว.
+    </div>
+    <div class="scale-grid">
+      <div class="scale-item s1"><span class="num">1</span><span class="lv">Not Applicable</span><div class="desc">ยังไม่พบสมรรถนะตามที่กำหนด</div></div>
+      <div class="scale-item s2"><span class="num">2</span><span class="lv">Beginner</span><div class="desc">มีสมรรถนะระดับพื้นฐาน</div></div>
+      <div class="scale-item s3"><span class="num">3</span><span class="lv">Intermediate</span><div class="desc">มีสมรรถนะระดับกลาง</div></div>
+      <div class="scale-item s4"><span class="num">4</span><span class="lv">Advanced</span><div class="desc">มีสมรรถนะระดับสูง</div></div>
+    </div>
+  </div>
+
+  <!-- 2. Meta Fields -->
+  <div class="card">
+    <div class="card-title">🏢 ข้อมูลผู้ประเมิน</div>
+    <div class="meta-grid">
+      <div class="field">
+        <label>หน่วยงาน</label>
+        <input type="text" id="department" placeholder="ระบุชื่อหน่วยงาน / ฝ่าย / กอง" required>
+      </div>
+      <div class="field">
+        <label>ชื่อผู้ประเมิน</label>
+        <input type="text" id="assessor" placeholder="ชื่อ-นามสกุลผู้ประเมิน" required>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Competency Reference -->
+  <div class="card">
+    <div class="card-title">📖 คำนิยามสมรรถนะ (Core Business)</div>
+    <button class="comp-ref-toggle" onclick="toggleRef()">▼ ดู/ซ่อน นิยามสมรรถนะแต่ละระดับ</button>
+    <div class="comp-ref" id="compRef">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th style="width:22%">สมรรถนะ</th>
+            <th style="width:26%">ระดับ 2 — Beginner</th>
+            <th style="width:26%">ระดับ 3 — Intermediate</th>
+            <th style="width:26%">ระดับ 4 — Advanced</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="comp-num">1</span><span class="comp-name">Business Mindset &amp; Growth Mindset</span><br><small>การคิดเชิงธุรกิจ / การคิดแบบเติบโต</small></td>
+            <td>เข้าใจเป้าหมายและต้นทุนโครงการ ทำงานเสร็จตรงเวลา เปิดใจรับฟังคำติชม ไม่กลัวความผิดพลาด</td>
+            <td>มองเห็นความต้องการตลาด เสนอแนวทางลดต้นทุน มองปัญหาเป็นโอกาสในการเรียนรู้</td>
+            <td>วิเคราะห์เชื่อมโยงนโยบายองค์กร สร้างแรงบันดาลใจเพื่อนร่วมงาน ถอดบทเรียนจากความผิดพลาด</td>
+          </tr>
+          <tr>
+            <td><span class="comp-num">2</span><span class="comp-name">Service Excellence (External)</span><br><small>การบริการลูกค้าภายนอก</small></td>
+            <td>ส่งมอบผลงาน ประสานงานกับผู้ใช้บริการอย่างถูกต้อง สุภาพ ตรงเวลา</td>
+            <td>รับฟัง แนะนำทางเลือกได้ตรงตามความต้องการผู้ใช้บริการ</td>
+            <td>นำข้อเสนอแนะจากแหล่งต่างๆ มาปรับปรุงกระบวนการทำงานได้อย่างมีประสิทธิภาพ</td>
+          </tr>
+          <tr>
+            <td><span class="comp-num">3</span><span class="comp-name">Quality &amp; Accuracy</span><br><small>ความถูกต้องแม่นยำของงาน</small></td>
+            <td>ปฏิบัติตามคู่มือมาตรฐาน ไม่เกิดข้อผิดพลาดซ้ำเดิม</td>
+            <td>ตรวจสอบ ระบุความคลาดเคลื่อนในกระบวนการทำงานได้ด้วยตนเอง</td>
+            <td>ออกแบบระบบป้องกันความผิดพลาด (Error-Proofing) ปรับปรุงมาตรฐานการทำงาน</td>
+          </tr>
+          <tr>
+            <td><span class="comp-num">4</span><span class="comp-name">Innovation &amp; Design Thinking</span><br><small>การมุ่งเน้นนวัตกรรม</small></td>
+            <td>ช่างสังเกต เสนอความคิดเห็น หรือวิธีการใหม่ในการปรับปรุงงาน</td>
+            <td>คิดเป็นระบบ ระบุปัญหาที่แท้จริง สร้างกระบวนการใหม่ๆ ได้</td>
+            <td>ขยายผลต้นแบบสู่งานจริง ผลักดันนวัตกรรมเชิงกระบวนการหรือผลิตภัณฑ์</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-sm)">
+        <strong>เป้าหมายตามประเภทลูกจ้าง:</strong>
+        ลูกจ้างเฉพาะกิจ = ระดับ 2 &nbsp;|&nbsp; ลูกจ้างทั่วไป = ระดับ 3 &nbsp;|&nbsp; ลูกจ้างประจำ = ระดับ 4
+        &nbsp;·&nbsp; <strong>GAP</strong> = คะแนนที่ประเมิน − ระดับเป้าหมาย
+        (บวก/ศูนย์ = ผ่านเป้าหมาย, ลบ = ต่ำกว่าเป้าหมาย)
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Employee Table -->
+  <div class="card">
+    <div class="card-title">👥 ตารางประเมินรายบุคคล</div>
+    <div class="table-wrapper">
+      <table class="emp-table" id="empTable">
+        <thead>
+          <tr>
+            <th rowspan="2" style="width:42px">#</th>
+            <th rowspan="2" style="min-width:200px">ชื่อ-นามสกุล</th>
+            <th rowspan="2" style="width:140px">ประเภทลูกจ้าง</th>
+            <th colspan="2" class="comp-header">C1 — Business Mindset<br>&amp; Growth Mindset</th>
+            <th colspan="2" class="comp-header">C2 — Service Excellence<br>(External)</th>
+            <th colspan="2" class="comp-header">C3 — Quality<br>&amp; Accuracy</th>
+            <th colspan="2" class="comp-header">C4 — Innovation<br>&amp; Design Thinking</th>
+            <th rowspan="2" style="width:44px"></th>
+          </tr>
+          <tr>
+            <th class="comp-header" style="width:72px">ระดับ</th>
+            <th class="gap-header"  style="width:52px">GAP</th>
+            <th class="comp-header" style="width:72px">ระดับ</th>
+            <th class="gap-header"  style="width:52px">GAP</th>
+            <th class="comp-header" style="width:72px">ระดับ</th>
+            <th class="gap-header"  style="width:52px">GAP</th>
+            <th class="comp-header" style="width:72px">ระดับ</th>
+            <th class="gap-header"  style="width:52px">GAP</th>
+          </tr>
+        </thead>
+        <tbody id="empBody"></tbody>
+      </table>
+    </div>
+    <div class="table-actions">
+      <button class="btn-add" onclick="addRow()">＋ เพิ่มพนักงาน</button>
+      <span class="row-count" id="rowCount">0 / 25 คน</span>
+    </div>
+  </div>
+
+  <!-- 5. Submit -->
+  <div class="card">
+    <div class="submit-section">
+      <button class="btn-submit" id="submitBtn" onclick="submitForm()">
+        📤 ส่งข้อมูลการประเมิน
+      </button>
+      <div class="submit-note">
+        ข้อมูลจะถูกบันทึกลง Google Sheets โดยอัตโนมัติ · กรุณาตรวจสอบความถูกต้องก่อนส่ง
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    แบบประเมินสมรรถนะประจำตำแหน่ง — Core Business (CB) | สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย วว. | ปีงบประมาณ 2569
+  </div>
+</div>
+
+<!-- ── SUCCESS OVERLAY ─────────────────────────────────── -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-box">
+    <div class="success-icon">✅</div>
+    <h2>ส่งข้อมูลสำเร็จ!</h2>
+    <p id="successMsg">ข้อมูลการประเมินถูกบันทึกลง Google Sheets เรียบร้อยแล้ว<br>ขอบคุณที่ประเมินสมรรถนะทีมของคุณ</p>
+    <button class="btn-another" onclick="resetForm()">ส่งแบบประเมินใหม่อีกครั้ง</button>
+  </div>
+</div>
+
+<!-- ── TOAST ──────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ═══════════════════════════════════════════════════════
+     ⚙️  CONFIG — แก้ไขค่า URL ด้านล่างนี้หลัง Deploy GAS
+  ══════════════════════════════════════════════════════ */
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyXsdHYKjI8xTQ9rEc2lQ2eXH8Th44bCMndhOe8HaUS3OzOShxArxtcabUe8vnrnYhpoA/exec';
+  const FORM_TYPE = 'CB';
+  const MAX_ROWS  = 25;
+
+  /* ═══════════════════════════════════════════════════════
+     CONSTANTS
+  ══════════════════════════════════════════════════════ */
+  const TARGET = { 'เฉพาะกิจ': 2, 'ทั่วไป': 3, 'ประจำ': 4 };
+
+  /* ═══════════════════════════════════════════════════════
+     INIT
+  ══════════════════════════════════════════════════════ */
+  window.onload = () => {
+    if (APPS_SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+      document.getElementById('setupWarn').style.display = 'none';
+    }
+    for (let i = 0; i < 5; i++) addRow();
+  };
+
+  /* ═══════════════════════════════════════════════════════
+     ADD ROW
+  ══════════════════════════════════════════════════════ */
+  function addRow() {
+    const tbody = document.getElementById('empBody');
+    const count = tbody.rows.length;
+    if (count >= MAX_ROWS) { showToast('ครบ 25 คนแล้ว', 'info'); return; }
+
+    const idx = count + 1;
+    const row = document.createElement('tr');
+    row.id = `row-${idx}`;
+    row.innerHTML = `
+      <td class="row-num">${idx}</td>
+      <td><input type="text" placeholder="ชื่อ-นามสกุล" class="name-input"></td>
+      <td>
+        <select onchange="calcGaps(this.closest('tr'))">
+          <option value="">— เลือก —</option>
+          <option value="เฉพาะกิจ">ลูกจ้างเฉพาะกิจ</option>
+          <option value="ทั่วไป">ลูกจ้างทั่วไป</option>
+          <option value="ประจำ">ลูกจ้างประจำ</option>
+        </select>
+      </td>
+      ${[1,2,3,4].map(c => `
+        <td>
+          <select class="c${c}-sel" onchange="calcGaps(this.closest('tr'))">
+            <option value="">—</option>
+            <option value="1">1 — N/A</option>
+            <option value="2">2 — Beginner</option>
+            <option value="3">3 — Intermediate</option>
+            <option value="4">4 — Advanced</option>
+          </select>
+        </td>
+        <td><div class="gap-cell gap-na" id="g${c}-${idx}">—</div></td>
+      `).join('')}
+      <td><button class="btn-del" onclick="delRow(this)" title="ลบแถวนี้">✕</button></td>
+    `;
+    tbody.appendChild(row);
+    updateCount();
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     DELETE ROW
+  ══════════════════════════════════════════════════════ */
+  function delRow(btn) {
+    const tbody = document.getElementById('empBody');
+    if (tbody.rows.length <= 1) { showToast('ต้องมีอย่างน้อย 1 แถว', 'info'); return; }
+    btn.closest('tr').remove();
+    renumberRows();
+    updateCount();
+  }
+
+  function renumberRows() {
+    document.querySelectorAll('#empBody tr').forEach((row, i) => {
+      row.id = `row-${i+1}`;
+      row.querySelector('.row-num').textContent = i + 1;
+      [1,2,3,4].forEach(c => {
+        const g = row.querySelector(`[id^="g${c}-"]`);
+        if (g) g.id = `g${c}-${i+1}`;
+      });
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     CALC GAPS
+  ══════════════════════════════════════════════════════ */
+  function calcGaps(row) {
+    const typeEl  = row.querySelector('select');
+    const empType = typeEl.value;
+    const target  = TARGET[empType] || null;
+    const rowIdx  = row.querySelector('.row-num').textContent;
+
+    [1,2,3,4].forEach(c => {
+      const selVal = row.querySelector(`.c${c}-sel`)?.value;
+      const gCell  = document.getElementById(`g${c}-${rowIdx}`);
+      if (!gCell) return;
+
+      if (!selVal || !target) {
+        gCell.textContent = '—';
+        gCell.className   = 'gap-cell gap-na';
+        return;
+      }
+      const score = parseInt(selVal);
+      const gap   = score - target;
+      gCell.textContent = gap >= 0 ? `+${gap}` : `${gap}`;
+      gCell.className   = `gap-cell ${gap > 0 ? 'gap-pos' : gap < 0 ? 'gap-neg' : 'gap-zero'}`;
+    });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     UPDATE COUNT
+  ══════════════════════════════════════════════════════ */
+  function updateCount() {
+    const n = document.getElementById('empBody').rows.length;
+    document.getElementById('rowCount').textContent = `${n} / ${MAX_ROWS} คน`;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     TOGGLE REF
+  ══════════════════════════════════════════════════════ */
+  function toggleRef() {
+    const el  = document.getElementById('compRef');
+    const btn = document.querySelector('.comp-ref-toggle');
+    el.classList.toggle('open');
+    btn.textContent = el.classList.contains('open')
+      ? '▲ ซ่อนนิยามสมรรถนะ' : '▼ ดู/ซ่อน นิยามสมรรถนะแต่ละระดับ';
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     COLLECT DATA
+  ══════════════════════════════════════════════════════ */
+  function collectData() {
+    const dept     = document.getElementById('department').value.trim();
+    const assessor = document.getElementById('assessor').value.trim();
+    const rows     = document.querySelectorAll('#empBody tr');
+    const employees = [];
+
+    rows.forEach((row, i) => {
+      const inputs  = row.querySelectorAll('input[type="text"]');
+      const selects = row.querySelectorAll('select');
+      const name    = inputs[0]?.value.trim();
+      if (!name) return; // skip empty rows
+
+      const empType  = selects[0]?.value || '';
+      const target   = TARGET[empType] || null;
+      const ridx     = i + 1;
+      const scores   = [1,2,3,4].map(c => {
+        const v = selects[c]?.value;
+        return v ? parseInt(v) : null;
+      });
+      const gaps = scores.map(s => (s !== null && target) ? s - target : null);
+
+      employees.push({ name, empType, scores, gaps });
+    });
+
+    return { dept, assessor, employees };
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     SUBMIT
+  ══════════════════════════════════════════════════════ */
+  async function submitForm() {
+    if (APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+      showToast('กรุณาตั้งค่า APPS_SCRIPT_URL ก่อน (ดู README)', 'error'); return;
+    }
+
+    const dept     = document.getElementById('department').value.trim();
+    const assessor = document.getElementById('assessor').value.trim();
+    if (!dept)     { showToast('กรุณากรอกชื่อหน่วยงาน', 'error'); return; }
+    if (!assessor) { showToast('กรุณากรอกชื่อผู้ประเมิน', 'error'); return; }
+
+    const { employees } = collectData();
+    if (employees.length === 0) {
+      showToast('กรุณากรอกข้อมูลพนักงานอย่างน้อย 1 คน', 'error'); return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>กำลังส่งข้อมูล...';
+
+    const payload = {
+      formType:   FORM_TYPE,
+      department: dept,
+      assessor,
+      submittedAt: new Date().toLocaleString('th-TH', {timeZone:'Asia/Bangkok'}),
+      employees
+    };
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode:   'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+      // no-cors → can't read response, assume success after 1.5s
+      await new Promise(r => setTimeout(r, 1500));
+
+      document.getElementById('successMsg').innerHTML =
+        `บันทึกข้อมูล <strong>${employees.length} คน</strong> จากหน่วยงาน <strong>${dept}</strong> เรียบร้อยแล้ว`;
+      document.getElementById('successOverlay').classList.add('show');
+
+    } catch (err) {
+      showToast('เกิดข้อผิดพลาด: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '📤 ส่งข้อมูลการประเมิน';
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     RESET
+  ══════════════════════════════════════════════════════ */
+  function resetForm() {
+    document.getElementById('successOverlay').classList.remove('show');
+    document.getElementById('department').value = '';
+    document.getElementById('assessor').value   = '';
+    document.getElementById('empBody').innerHTML = '';
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = false;
+    btn.innerHTML = '📤 ส่งข้อมูลการประเมิน';
+    for (let i = 0; i < 5; i++) addRow();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     TOAST
+  ══════════════════════════════════════════════════════ */
+  function showToast(msg, type = 'info') {
+    const t = document.getElementById('toast');
+    t.textContent  = msg;
+    t.className    = `toast ${type}`;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3500);
+  }
+</script>
+</body>
+</html>
