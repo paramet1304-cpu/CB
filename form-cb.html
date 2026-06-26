@@ -494,7 +494,12 @@
     <div class="meta-grid">
       <div class="field">
         <label>หน่วยงาน</label>
-        <input type="text" id="department" placeholder="ระบุชื่อหน่วยงาน / ฝ่าย / กอง" required>
+        <select id="department" required style="width:100%;border:1.5px solid var(--border);border-radius:7px;padding:10px 14px;font-size:14px;font-family:inherit;color:var(--text);outline:none;background:#fff;cursor:pointer;transition:border-color .2s;">
+          <option value="">— เลือกหน่วยงาน —</option>
+          <option value="ศคช.">ศคช.</option>
+          <option value="ศนพ.">ศนพ.</option>
+          <option value="ศทม.">ศทม.</option>
+        </select>
       </div>
       <div class="field">
         <label>ชื่อผู้ประเมิน</label>
@@ -789,7 +794,7 @@
 
     const dept     = document.getElementById('department').value.trim();
     const assessor = document.getElementById('assessor').value.trim();
-    if (!dept)     { showToast('กรุณากรอกชื่อหน่วยงาน', 'error'); return; }
+    if (!dept)     { showToast('กรุณาเลือกหน่วยงาน', 'error'); return; }
     if (!assessor) { showToast('กรุณากรอกชื่อผู้ประเมิน', 'error'); return; }
 
     const { employees } = collectData();
