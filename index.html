@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบประเมินสมรรถนะประจำตำแหน่ง | วว. 2569</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --cb:        #0F3460;
+      --cb-lt:     #1A4F8A;
+      --cb-acc:    #17A589;
+      --sp:        #4A235A;
+      --sp-lt:     #6B3580;
+      --sp-acc:    #E67E22;
+      --white:     #FFFFFF;
+      --off:       #F2F5FA;
+      --text:      #1C2B3A;
+      --text-sm:   #5A7080;
+      --border:    #DDE4EE;
+    }
+
+    /* ── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Sarabun', system-ui, sans-serif;
+      background: var(--off);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── TOP BAR ────────────────────────────────────────── */
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 8px rgba(0,0,0,.06);
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--cb), var(--sp));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.5px;
+    }
+    .topbar-org {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .topbar-org span {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-sm);
+    }
+    .topbar-year {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-sm);
+      background: var(--off);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── HERO ───────────────────────────────────────────── */
+    .hero {
+      padding: 64px 40px 48px;
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--cb-acc);
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      width: 24px;
+      height: 1.5px;
+      background: var(--cb-acc);
+    }
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 800;
+      line-height: 1.25;
+      color: var(--text);
+      margin-bottom: 18px;
+      letter-spacing: -.5px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--cb), var(--sp));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--text-sm);
+      line-height: 1.8;
+      max-width: 520px;
+      margin: 0 auto 12px;
+    }
+    .hero-note {
+      font-size: 13px;
+      color: #A0AFC0;
+      margin-top: 6px;
+    }
+
+    /* ── SPLIT CARDS ────────────────────────────────────── */
+    .cards-section {
+      padding: 8px 32px 64px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .cards-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-card {
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease;
+      text-decoration: none;
+      display: block;
+    }
+    .form-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(0,0,0,.18);
+    }
+
+    .card-inner {
+      padding: 44px 40px 40px;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .card-cb { background: linear-gradient(145deg, var(--cb) 0%, var(--cb-lt) 100%); }
+    .card-sp { background: linear-gradient(145deg, var(--sp) 0%, var(--sp-lt) 100%); }
+
+    /* Decorative circles */
+    .card-inner::before {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      top: -80px;
+      right: -80px;
+      opacity: .08;
+      background: #fff;
+    }
+    .card-inner::after {
+      content: '';
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      bottom: 40px;
+      left: -40px;
+      opacity: .06;
+      background: #fff;
+    }
+
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 24px;
+    }
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .badge-dot-cb { background: var(--cb-acc); }
+    .badge-dot-sp { background: var(--sp-acc); }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 8px;
+    }
+    .card-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .card-subtitle {
+      font-size: 13px;
+      color: rgba(255,255,255,.55);
+      margin-bottom: 32px;
+    }
+
+    .comp-list {
+      list-style: none;
+      margin-bottom: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .comp-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      color: rgba(255,255,255,.85);
+      line-height: 1.5;
+    }
+    .comp-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .comp-icon-cb { background: rgba(23,165,137,.25); color: var(--cb-acc); }
+    .comp-icon-sp { background: rgba(230,126,34,.25); color: var(--sp-acc); }
+
+    .card-cta {
+      margin-top: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+      transition: opacity .15s, gap .2s;
+      text-decoration: none;
+      width: fit-content;
+    }
+    .cta-cb { background: var(--cb-acc); color: #fff; }
+    .cta-sp { background: var(--sp-acc); color: #fff; }
+    .form-card:hover .card-cta { gap: 14px; }
+    .cta-arrow { font-size: 16px; transition: transform .2s; }
+    .form-card:hover .cta-arrow { transform: translateX(3px); }
+
+    /* ── HOW IT WORKS ───────────────────────────────────── */
+    .how-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px 72px;
+    }
+    .section-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-sm);
+      margin-bottom: 36px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 22px;
+      left: calc(16.67% + 8px);
+      right: calc(16.67% + 8px);
+      height: 1.5px;
+      background: var(--border);
+    }
+    .step {
+      text-align: center;
+      padding: 0 24px;
+      position: relative;
+    }
+    .step-num {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0 auto 18px;
+      position: relative;
+      z-index: 1;
+    }
+    .step-num.active-cb { border-color: var(--cb-acc); color: var(--cb); background: #E8FAF6; }
+    .step-num.active-sp { border-color: var(--sp-acc); color: var(--sp); background: #FEF0E5; }
+    .step h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .step p {
+      font-size: 13px;
+      color: var(--text-sm);
+      line-height: 1.7;
+    }
+
+    /* ── GAP LEGEND ─────────────────────────────────────── */
+    .legend-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px 72px;
+    }
+    .legend-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 36px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+    }
+    .legend-text h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .legend-text p {
+      font-size: 13px;
+      color: var(--text-sm);
+      line-height: 1.7;
+    }
+    .legend-chips {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .chip-val {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .chip-val.pos { background: #D5F5E3; color: #1E8449; }
+    .chip-val.zero { background: #D6EAF8; color: #2980B9; }
+    .chip-val.neg { background: #FADBD8; color: #C0392B; }
+    .chip-lbl { font-size: 11px; color: var(--text-sm); font-weight: 600; text-align: center; }
+
+    /* ── FOOTER ─────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-sm);
+    }
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-links a {
+      color: var(--text-sm);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── RESPONSIVE ─────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .topbar { padding: 0 20px; }
+      .hero { padding: 40px 24px 32px; }
+      .cards-section { padding: 0 20px 48px; }
+      .cards-wrap { grid-template-columns: 1fr; }
+      .card-inner { min-height: auto; padding: 36px 28px 32px; }
+      .how-section, .legend-section { padding: 0 20px 48px; }
+      .steps { grid-template-columns: 1fr; gap: 28px; }
+      .steps::before { display: none; }
+      .legend-card { grid-template-columns: 1fr; }
+      .legend-chips { justify-content: center; }
+      .footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* ── ANIMATIONS ─────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero    { animation: fadeUp .5s ease both; }
+    .form-card:nth-child(1) { animation: fadeUp .5s .1s ease both; }
+    .form-card:nth-child(2) { animation: fadeUp .5s .2s ease both; }
+    .how-section    { animation: fadeUp .5s .3s ease both; }
+    .legend-section { animation: fadeUp .5s .35s ease both; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TOP BAR ──────────────────────────────────────────── -->
+<header class="topbar">
+  <div class="topbar-left">
+    <div class="logo-mark">วว</div>
+    <div class="topbar-org">
+      ระบบประเมินสมรรถนะประจำตำแหน่ง
+      <span>สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย</span>
+    </div>
+  </div>
+  <div class="topbar-year">ปีงบประมาณ 2569</div>
+</header>
+
+<!-- ── HERO ─────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-eyebrow">Functional Competency Assessment</div>
+  <h1>ประเมินสมรรถนะ<br><em>ลูกจ้าง วว.</em></h1>
+  <p>เลือกแบบประเมินให้ตรงกับกลุ่มงานของทีมคุณ ผู้ประเมินสามารถกรอกข้อมูลและประเมินสมรรถนะพร้อมคำนวณ GAP ได้ในหน้าเดียว</p>
+  <div class="hero-note">สำหรับผู้บังคับบัญชา / หัวหน้างาน เท่านั้น</div>
+</section>
+
+<!-- ── CARDS ─────────────────────────────────────────────── -->
+<section class="cards-section">
+  <div class="cards-wrap">
+
+    <!-- CB Card -->
+    <a class="form-card" href="form-cb.html">
+      <div class="card-inner card-cb">
+        <div class="card-badge">
+          <span class="badge-dot badge-dot-cb"></span>
+          Core Business
+        </div>
+        <div class="card-label">แบบประเมินชุดที่ 1</div>
+        <div class="card-title">กลุ่มงานวิจัย<br>และบริการ</div>
+        <div class="card-subtitle">สำหรับลูกจ้างสายงานวิจัย พัฒนา และบริการลูกค้า</div>
+
+        <ul class="comp-list">
+          <li>
+            <span class="comp-icon comp-icon-cb">C1</span>
+            Business Mindset &amp; Growth Mindset
+          </li>
+          <li>
+            <span class="comp-icon comp-icon-cb">C2</span>
+            Service Excellence (External)
+          </li>
+          <li>
+            <span class="comp-icon comp-icon-cb">C3</span>
+            Quality &amp; Accuracy
+          </li>
+          <li>
+            <span class="comp-icon comp-icon-cb">C4</span>
+            Innovation &amp; Design Thinking
+          </li>
+        </ul>
+
+        <span class="card-cta cta-cb">
+          เริ่มประเมิน CB
+          <span class="cta-arrow">→</span>
+        </span>
+      </div>
+    </a>
+
+    <!-- SP Card -->
+    <a class="form-card" href="form-sp.html">
+      <div class="card-inner card-sp">
+        <div class="card-badge">
+          <span class="badge-dot badge-dot-sp"></span>
+          Support
+        </div>
+        <div class="card-label">แบบประเมินชุดที่ 2</div>
+        <div class="card-title">กลุ่มงาน<br>สนับสนุน</div>
+        <div class="card-subtitle">สำหรับลูกจ้างสายงานสนับสนุนการดำเนินงานองค์กร</div>
+
+        <ul class="comp-list">
+          <li>
+            <span class="comp-icon comp-icon-sp">C1</span>
+            Business Mindset &amp; Growth Mindset
+          </li>
+          <li>
+            <span class="comp-icon comp-icon-sp">C2</span>
+            Service Excellence (Internal)
+          </li>
+          <li>
+            <span class="comp-icon comp-icon-sp">C3</span>
+            Systemic Thinking
+          </li>
+          <li>
+            <span class="comp-icon comp-icon-sp">C4</span>
+            Business Partner
+          </li>
+        </ul>
+
+        <span class="card-cta cta-sp">
+          เริ่มประเมิน SP
+          <span class="cta-arrow">→</span>
+        </span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ──────────────────────────────────────── -->
+<section class="how-section">
+  <div class="section-label">ขั้นตอนการประเมิน</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num active-cb">1</div>
+      <h3>เลือกกลุ่มงาน</h3>
+      <p>เลือกแบบประเมิน CB หรือ SP ให้ตรงกับสายงานของลูกจ้างที่จะประเมิน</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>กรอกข้อมูลทีม</h3>
+      <p>ระบุชื่อหน่วยงาน ผู้ประเมิน และประเมินสมรรถนะลูกจ้างแต่ละคน (สูงสุด 25 คน)</p>
+    </div>
+    <div class="step">
+      <div class="step-num active-sp">3</div>
+      <h3>ส่งผลการประเมิน</h3>
+      <p>กด "ส่งข้อมูล" ระบบจะบันทึกผลและคำนวณ GAP ลง Google Sheets โดยอัตโนมัติ</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── GAP LEGEND ────────────────────────────────────────── -->
+<section class="legend-section">
+  <div class="legend-card">
+    <div class="legend-text">
+      <h3>การอ่านค่า GAP (ช่องว่างสมรรถนะ)</h3>
+      <p>
+        GAP คือผลต่างระหว่างระดับสมรรถนะที่ประเมินได้กับระดับเป้าหมายตามประเภทลูกจ้าง<br>
+        <strong>เฉพาะกิจ = เป้าหมาย 2 &nbsp;·&nbsp; ทั่วไป = เป้าหมาย 3 &nbsp;·&nbsp; ประจำ = เป้าหมาย 4</strong>
+      </p>
+    </div>
+    <div class="legend-chips">
+      <div class="chip">
+        <div class="chip-val pos">+1</div>
+        <div class="chip-lbl">เกินเป้า</div>
+      </div>
+      <div class="chip">
+        <div class="chip-val zero">0</div>
+        <div class="chip-lbl">ผ่านเป้า</div>
+      </div>
+      <div class="chip">
+        <div class="chip-val neg">−1</div>
+        <div class="chip-lbl">ต่ำกว่าเป้า</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────── -->
+<footer class="footer">
+  <div>© 2569 สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย (วว.) — ระบบประเมินสมรรถนะประจำตำแหน่ง</div>
+  <div class="footer-links">
+    <a href="form-cb.html">แบบประเมิน CB</a>
+    <a href="form-sp.html">แบบประเมิน SP</a>
+  </div>
+</footer>
+
+</body>
+</html>
