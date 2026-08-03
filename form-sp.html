@@ -41,11 +41,14 @@
       padding: 0 32px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 16px;
-      height: 60px;
+      height: 64px;
     }
+    .top-bar-left { display: flex; align-items: center; gap: 16px; min-width: 0; }
+    .top-logo { height: 42px; width: auto; flex-shrink: 0; }
     .top-bar .org   { font-size: 13px; opacity: .7; }
-    .top-bar .title { font-size: 16px; font-weight: 600; flex: 1; }
+    .top-bar .title { font-size: 16px; font-weight: 600; }
     .badge-sp {
       background: var(--badge-sp);
       color: #fff;
@@ -193,6 +196,44 @@
       margin-right: 6px;
       flex-shrink: 0;
     }
+    .comp-weight {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 10px;
+      margin-left: 6px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .comp-def {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 400;
+      color: var(--text-sm);
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+    .kw-list { list-style: none; padding: 0; margin: 0; }
+    .kw-list li {
+      position: relative;
+      padding-left: 15px;
+      margin-bottom: 5px;
+      line-height: 1.55;
+    }
+    .kw-list li:last-child { margin-bottom: 0; }
+    .kw-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .na-cell { color: #9AA7B5; font-style: italic; font-size: 12.5px; }
+    .comp-table-wrap { overflow-x: auto; }
 
     .table-wrapper { overflow-x: auto; }
 
@@ -201,7 +242,7 @@
       border-collapse: separate;
       border-spacing: 0;
       font-size: 13px;
-      min-width: 1100px;
+      min-width: 1260px;
     }
     .emp-table thead th {
       background: var(--primary);
@@ -418,9 +459,12 @@
 <body>
 
 <div class="top-bar">
-  <div>
-    <div class="org">สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย (วว.)</div>
-    <div class="title">แบบประเมินสมรรถนะประจำตำแหน่งสำหรับลูกจ้าง วว. — ประจำปี 2569</div>
+  <div class="top-bar-left">
+    <img src="tistr-logo.png" alt="โลโก้ วว." class="top-logo">
+    <div>
+      <div class="org">สถาบันวิจัยวิทยาศาสตร์และเทคโนโลยีแห่งประเทศไทย (วว.)</div>
+      <div class="title">แบบประเมินสมรรถนะประจำตำแหน่งสำหรับลูกจ้าง วว. — ประจำปี 2569</div>
+    </div>
   </div>
   <span class="badge-sp">Support (SP)</span>
 </div>
@@ -480,46 +524,127 @@
     <div class="card-title">📖 คำนิยามสมรรถนะ (Support)</div>
     <button class="comp-ref-toggle" onclick="toggleRef()">▼ ดู/ซ่อน นิยามสมรรถนะแต่ละระดับ</button>
     <div class="comp-ref" id="compRef">
+      <div class="comp-table-wrap">
       <table class="comp-table">
         <thead>
           <tr>
-            <th style="width:22%">สมรรถนะ</th>
-            <th style="width:26%">ระดับ 2 — Beginner</th>
-            <th style="width:26%">ระดับ 3 — Intermediate</th>
-            <th style="width:26%">ระดับ 4 — Advanced</th>
+            <th style="width:19%">สมรรถนะ</th>
+            <th style="width:14%">ระดับ 1<br>Not Applicable</th>
+            <th style="width:22.5%">ระดับ 2<br>Beginner</th>
+            <th style="width:22.5%">ระดับ 3<br>Intermediate</th>
+            <th style="width:22%">ระดับ 4<br>Advanced</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><span class="comp-num">1</span><span class="comp-name">Business Mindset &amp; Growth Mindset</span><br><small>การคิดเชิงธุรกิจ / การคิดแบบเติบโต</small></td>
-            <td>เข้าใจเป้าหมายและหน้าที่รับผิดชอบ ทำงานตรงเวลา เปิดใจรับฟังคำติชม ไม่กลัวความผิดพลาด</td>
-            <td>มองปัญหาเป็นโอกาสในการเรียนรู้ ศึกษาหาช่องทางหรือวิธีการทำงานใหม่ๆ</td>
-            <td>วิเคราะห์เชื่อมโยงนโยบายองค์กร สร้างแรงบันดาลใจเพื่อนร่วมงาน ถอดบทเรียน</td>
+            <td>
+              <span class="comp-num">1</span><span class="comp-name">Business Partner</span><span class="comp-weight">น้ำหนัก 30%</span>
+              <span class="comp-def">การเป็นคู่คิดเชิงรุกให้กับหน่วยงานและองค์กร ด้วยการประสานงานและสนับสนุนข้อมูลที่มีคุณค่าต่อการตัดสินใจ</span>
+            </td>
+            <td class="na-cell">ยังไม่พบสมรรถนะตามที่กำหนด</td>
+            <td><ul class="kw-list">
+              <li>เข้าใจภารกิจภาพรวมของหน่วยงาน</li>
+              <li>ประสานงานและส่งมอบเอกสารถูกต้อง</li>
+              <li>สนับสนุนข้อมูลตามที่ได้รับมอบหมาย</li>
+              <li>ตอบสนองต่อคำขอได้ทันเวลา</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>ประสานงานเชิงรุกโดยไม่ต้องรอคำสั่ง</li>
+              <li>รับฟังปัญหาและให้คำแนะนำเบื้องต้น</li>
+              <li>เชื่อมโยงข้อมูลระหว่างหน่วยงานได้</li>
+              <li>เสนอแนวทางสนับสนุนที่ตรงความต้องการ</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>เป็นตัวแทนหน่วยงานในการประสานเชิงกลยุทธ์</li>
+              <li>ร่วมวางแผนกับผู้บริหารจนเกิดผลลัพธ์จริง</li>
+              <li>ให้ข้อมูลสำคัญประกอบการตัดสินใจระดับองค์กร</li>
+              <li>สร้างความไว้วางใจในฐานะคู่คิดของหน่วยงาน</li>
+            </ul></td>
           </tr>
           <tr>
-            <td><span class="comp-num">2</span><span class="comp-name">Service Excellence (Internal)</span><br><small>การบริการลูกค้าภายใน</small></td>
-            <td>ส่งมอบผลงาน ประสานงานกับผู้ใช้บริการอย่างถูกต้อง สุภาพ ตรงเวลา</td>
-            <td>รับฟัง แนะนำทางเลือกได้ตรงตามความต้องการผู้ใช้บริการ</td>
-            <td>นำข้อเสนอแนะจากแหล่งต่างๆ มาปรับปรุงกระบวนการทำงานได้อย่างมีประสิทธิภาพ</td>
+            <td>
+              <span class="comp-num">2</span><span class="comp-name">Systemic Thinking</span><span class="comp-weight">น้ำหนัก 25%</span>
+              <span class="comp-def">ความสามารถในการมองภาพรวมและเชื่อมโยงกระบวนการทำงาน เพื่อวางแผนและแก้ไขปัญหาอย่างเป็นระบบ</span>
+            </td>
+            <td class="na-cell">ยังไม่พบสมรรถนะตามที่กำหนด</td>
+            <td><ul class="kw-list">
+              <li>เข้าใจขั้นตอนงานของตนเอง</li>
+              <li>เชื่อมโยงงานตนเองกับหน่วยงานได้เบื้องต้น</li>
+              <li>ปฏิบัติตามกระบวนการที่กำหนดไว้</li>
+              <li>แจ้งปัญหาที่พบให้ผู้เกี่ยวข้องทราบ</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>ตรวจสอบและระบุความคลาดเคลื่อนในกระบวนการ</li>
+              <li>เสนอแนวทางแก้ไขปัญหาเชิงระบบ</li>
+              <li>เชื่อมโยงข้อมูลจากหลายแหล่งเพื่อวิเคราะห์</li>
+              <li>ปรับปรุงขั้นตอนงานให้มีประสิทธิภาพขึ้น</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>วางแผนงานด้วยระบบมาตรฐานขององค์กร</li>
+              <li>เชื่อมโยงการทำงานระหว่างหน่วยงานอย่างมีประสิทธิภาพ</li>
+              <li>ออกแบบกระบวนการใหม่ที่ลดความซ้ำซ้อน</li>
+              <li>เป็นที่ปรึกษาด้านกระบวนการให้หน่วยงานอื่น</li>
+            </ul></td>
           </tr>
           <tr>
-            <td><span class="comp-num">3</span><span class="comp-name">Systemic Thinking</span><br><small>การคิดเชิงระบบและเชื่อมโยงงาน</small></td>
-            <td>เข้าใจและเชื่อมโยงได้ว่าขั้นตอนงานตนเองส่งผลต่อกระบวนการทำงานของหน่วยงานอย่างไร</td>
-            <td>ตรวจสอบ ระบุความคลาดเคลื่อนในกระบวนการทำงาน และเสนอแนวทางแก้ไขได้</td>
-            <td>วางแผนงานด้วยระบบมาตรฐาน เชื่อมโยงระหว่างหน่วยงานได้อย่างมีประสิทธิภาพ</td>
+            <td>
+              <span class="comp-num">3</span><span class="comp-name">Service Excellence</span><span class="comp-weight">น้ำหนัก 25%</span>
+              <span class="comp-def">มุ่งเน้นการให้บริการลูกค้าและผู้มีส่วนได้ส่วนเสียทั้งภายในและภายนอกองค์กร เพื่อสร้างความพึงพอใจและความไว้วางใจ</span>
+            </td>
+            <td class="na-cell">ยังไม่พบสมรรถนะตามที่กำหนด</td>
+            <td><ul class="kw-list">
+              <li>ส่งมอบผลงานถูกต้อง ตรงเวลา</li>
+              <li>ประสานงานอย่างสุภาพ</li>
+              <li>รับฟังความต้องการเบื้องต้น</li>
+              <li>ปฏิบัติตามมาตรฐานการบริการ</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>รับฟังและเข้าใจความต้องการเชิงลึก</li>
+              <li>แนะนำทางเลือกที่เหมาะสม</li>
+              <li>แก้ไขปัญหาเฉพาะหน้าได้ด้วยตนเอง</li>
+              <li>สร้างความพึงพอใจให้ผู้รับบริการ</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>นำข้อเสนอแนะมาปรับปรุงกระบวนการ</li>
+              <li>ออกแบบมาตรฐานบริการใหม่</li>
+              <li>สร้างความสัมพันธ์ระยะยาวกับผู้รับบริการ</li>
+              <li>เป็นต้นแบบด้านการบริการให้ผู้อื่น</li>
+            </ul></td>
           </tr>
           <tr>
-            <td><span class="comp-num">4</span><span class="comp-name">Business Partner</span><br><small>การเป็นคู่คิดและประสานงานเชิงรุก</small></td>
-            <td>เข้าใจภารกิจภาพรวม ประสานงาน ส่งมอบเอกสาร สนับสนุนข้อมูลได้ถูกต้อง</td>
-            <td>ประสานงานเชิงรุก รับฟังปัญหา ให้คำแนะนำเบื้องต้นได้</td>
-            <td>เป็นตัวแทนหน่วยงาน ร่วมวางแผน ประสาน ให้ข้อมูลสำคัญจนเกิดผลลัพธ์จริง</td>
+            <td>
+              <span class="comp-num">4</span><span class="comp-name">Business Mindset &amp; Growth Mindset</span><span class="comp-weight">น้ำหนัก 20%</span>
+              <span class="comp-def">การคิดเชิงธุรกิจควบคู่กับการพัฒนาตนเองอย่างต่อเนื่อง เพื่อสร้างคุณค่าให้องค์กรและปรับตัวต่อการเปลี่ยนแปลง</span>
+            </td>
+            <td class="na-cell">ยังไม่พบสมรรถนะตามที่กำหนด</td>
+            <td><ul class="kw-list">
+              <li>เข้าใจเป้าหมายและหน้าที่รับผิดชอบ</li>
+              <li>ทำงานตรงเวลา</li>
+              <li>เปิดใจรับฟังคำติชม</li>
+              <li>ไม่กลัวความผิดพลาด</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>มองปัญหาเป็นโอกาสในการเรียนรู้</li>
+              <li>เสนอแนวทางลดต้นทุน/เพิ่มประสิทธิภาพ</li>
+              <li>ศึกษาหาความรู้ใหม่ด้วยตนเอง</li>
+              <li>ปรับตัวต่อการเปลี่ยนแปลงได้ดี</li>
+            </ul></td>
+            <td><ul class="kw-list">
+              <li>วิเคราะห์เชื่อมโยงนโยบายองค์กร</li>
+              <li>สร้างแรงบันดาลใจให้เพื่อนร่วมงาน</li>
+              <li>ถอดบทเรียนจากความผิดพลาดเพื่อพัฒนา</li>
+              <li>ผลักดันการเปลี่ยนแปลงเชิงบวกในทีม</li>
+            </ul></td>
           </tr>
         </tbody>
       </table>
-      <div style="margin-top:12px;font-size:12px;color:var(--text-sm)">
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-sm);line-height:1.9">
         <strong>เป้าหมายตามประเภทลูกจ้าง:</strong>
-        ลูกจ้างเฉพาะกิจ = ระดับ 2 &nbsp;|&nbsp; ลูกจ้างทั่วไป = ระดับ 3 &nbsp;|&nbsp; ลูกจ้างประจำ = ระดับ 4
-        &nbsp;·&nbsp; <strong>GAP</strong> = คะแนนที่ประเมิน − ระดับเป้าหมาย
+        ลูกจ้างเฉพาะกิจ = ระดับ 2 &nbsp;|&nbsp; ลูกจ้างทั่วไป = ระดับ 3 &nbsp;|&nbsp; ลูกจ้างประจำ = ระดับ 4<br>
+        <strong>น้ำหนักความสำคัญของสมรรถนะ:</strong> C1 Business Partner 30% &nbsp;·&nbsp; C2 Systemic Thinking 25% &nbsp;·&nbsp; C3 Service Excellence 25% &nbsp;·&nbsp; C4 Business Mindset &amp; Growth Mindset 20%<br>
+        <strong>GAP</strong> = คะแนนที่ประเมิน − ระดับเป้าหมาย (บวก/ศูนย์ = ผ่านเป้าหมาย, ลบ = ต่ำกว่าเป้าหมาย)
+        &nbsp;·&nbsp; <strong>คะแนนถ่วงน้ำหนัก</strong> = ผลรวมของ (คะแนนแต่ละสมรรถนะ × น้ำหนัก)
       </div>
     </div>
   </div>
@@ -534,10 +659,12 @@
             <th rowspan="2" style="width:42px">#</th>
             <th rowspan="2" style="min-width:200px">ชื่อ-นามสกุล</th>
             <th rowspan="2" style="width:140px">ประเภทลูกจ้าง</th>
-            <th colspan="2" class="comp-header">C1 — Business Mindset<br>&amp; Growth Mindset</th>
-            <th colspan="2" class="comp-header">C2 — Service Excellence<br>(Internal)</th>
-            <th colspan="2" class="comp-header">C3 — Systemic<br>Thinking</th>
-            <th colspan="2" class="comp-header">C4 — Business<br>Partner</th>
+            <th colspan="2" class="comp-header">C1 · 30%<br>Business Partner</th>
+            <th colspan="2" class="comp-header">C2 · 25%<br>Systemic Thinking</th>
+            <th colspan="2" class="comp-header">C3 · 25%<br>Service Excellence</th>
+            <th colspan="2" class="comp-header">C4 · 20%<br>Business Mindset &amp; Growth Mindset</th>
+            <th rowspan="2" style="width:80px">คะแนนรวม<br>(ถ่วงน้ำหนัก)</th>
+            <th rowspan="2" style="width:80px">GAP รวม<br>(ถ่วงน้ำหนัก)</th>
             <th rowspan="2" style="width:44px"></th>
           </tr>
           <tr>
@@ -592,11 +719,12 @@
   /* ═══════════════════════════════════════════════════════
      ⚙️  CONFIG
   ══════════════════════════════════════════════════════ */
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyXsdHYKjI8xTQ9rEc2lQ2eXH8Th44bCMndhOe8HaUS3OzOShxArxtcabUe8vnrnYhpoA/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSMOiZBnE8ajGYcj-3ZEF4f1I5-DaZL79jJeIKMAOob7pxCCCgAvXJsm9Hn5UyGi0wHA/exec';
   const FORM_TYPE = 'SP';
   const MAX_ROWS  = 25;
 
-  const TARGET = { 'เฉพาะกิจ': 2, 'ทั่วไป': 3, 'ประจำ': 4 };
+  const TARGET  = { 'เฉพาะกิจ': 2, 'ทั่วไป': 3, 'ประจำ': 4 };
+  const WEIGHTS = { 1: 0.30, 2: 0.25, 3: 0.25, 4: 0.20 }; // C1..C4 ตามลำดับความสำคัญ
 
   window.onload = () => {
     if (APPS_SCRIPT_URL !== 'PLACEHOLDER') {
@@ -636,6 +764,8 @@
         </td>
         <td><div class="gap-cell gap-na" id="g${c}-${idx}">—</div></td>
       `).join('')}
+      <td><div class="gap-cell gap-na" id="wscore-${idx}">—</div></td>
+      <td><div class="gap-cell gap-na" id="wgap-${idx}">—</div></td>
       <td><button class="btn-del" onclick="delRow(this)" title="ลบแถวนี้">✕</button></td>
     `;
     tbody.appendChild(row);
@@ -658,6 +788,10 @@
         const g = row.querySelector(`[id^="g${c}-"]`);
         if (g) g.id = `g${c}-${i+1}`;
       });
+      const ws = row.querySelector('[id^="wscore-"]');
+      if (ws) ws.id = `wscore-${i+1}`;
+      const wg = row.querySelector('[id^="wgap-"]');
+      if (wg) wg.id = `wgap-${i+1}`;
     });
   }
 
@@ -665,6 +799,10 @@
     const empType = row.querySelector('select').value;
     const target  = TARGET[empType] || null;
     const rowIdx  = row.querySelector('.row-num').textContent;
+
+    let weightedScore = 0;
+    let allScored = true;
+
     [1,2,3,4].forEach(c => {
       const selVal = row.querySelector(`.c${c}-sel`)?.value;
       const gCell  = document.getElementById(`g${c}-${rowIdx}`);
@@ -672,12 +810,33 @@
       if (!selVal || !target) {
         gCell.textContent = '—';
         gCell.className   = 'gap-cell gap-na';
+        allScored = false;
         return;
       }
-      const gap = parseInt(selVal) - target;
+      const score = parseInt(selVal);
+      weightedScore += score * WEIGHTS[c];
+      const gap = score - target;
       gCell.textContent = gap >= 0 ? `+${gap}` : `${gap}`;
       gCell.className   = `gap-cell ${gap > 0 ? 'gap-pos' : gap < 0 ? 'gap-neg' : 'gap-zero'}`;
     });
+
+    const wsCell = document.getElementById(`wscore-${rowIdx}`);
+    const wgCell = document.getElementById(`wgap-${rowIdx}`);
+    if (!wsCell || !wgCell) return;
+
+    if (!allScored || !target) {
+      wsCell.textContent = '—';
+      wsCell.className   = 'gap-cell gap-na';
+      wgCell.textContent = '—';
+      wgCell.className   = 'gap-cell gap-na';
+      return;
+    }
+
+    const wGap = weightedScore - target;
+    wsCell.textContent = weightedScore.toFixed(2);
+    wsCell.className   = 'gap-cell gap-zero';
+    wgCell.textContent = wGap >= 0.005 ? `+${wGap.toFixed(2)}` : wGap.toFixed(2);
+    wgCell.className   = `gap-cell ${wGap > 0.005 ? 'gap-pos' : wGap < -0.005 ? 'gap-neg' : 'gap-zero'}`;
   }
 
   function updateCount() {
@@ -713,7 +872,15 @@
       const target   = TARGET[empType] || null;
       const scores   = [1,2,3,4].map(c => { const v = selects[c]?.value; return v ? parseInt(v) : null; });
       const gaps     = scores.map(s => (s !== null && target) ? s - target : null);
-      employees.push({ name, empType, scores, gaps });
+
+      let weightedScore = null, weightedGap = null;
+      if (scores.every(s => s !== null) && target) {
+        weightedScore = scores.reduce((sum, s, idx) => sum + s * WEIGHTS[idx + 1], 0);
+        weightedScore = Math.round(weightedScore * 100) / 100;
+        weightedGap   = Math.round((weightedScore - target) * 100) / 100;
+      }
+
+      employees.push({ name, empType, scores, gaps, weightedScore, weightedGap });
     });
 
     if (employees.length === 0) { showToast('กรุณากรอกข้อมูลพนักงานอย่างน้อย 1 คน', 'error'); return; }
