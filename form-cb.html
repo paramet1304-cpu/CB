@@ -256,7 +256,7 @@
       border-collapse: separate;
       border-spacing: 0;
       font-size: 13px;
-      min-width: 1260px;
+      min-width: 1680px;
     }
     .emp-table thead th {
       background: var(--primary);
@@ -329,6 +329,29 @@
     .gap-neg  { color: var(--gap-neg); }
     .gap-zero { color: var(--gap-zero); }
     .gap-na   { color: #BDC3C7; font-size: 11px; font-weight: 400; }
+
+    .dev-status {
+      font-size: 10.5px;
+      margin-top: 4px;
+      line-height: 1.4;
+      min-height: 14px;
+    }
+    .dev-status-self { color: #1E8449; font-weight: 600; }
+    .dev-status-hr   { color: #B7770D; font-weight: 600; }
+    .dev-status-talent { color: #B7950B; font-weight: 600; }
+    .emp-table input.suggestion-input { min-width: 190px; }
+    .talent-tag {
+      display: inline-block;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #7D5A00;
+      background: #FEF5DC;
+      border: 1px solid #F0D687;
+      border-radius: 8px;
+      padding: 1px 6px;
+      margin-top: 4px;
+      white-space: nowrap;
+    }
 
     .row-num {
       text-align: center;
@@ -683,6 +706,7 @@
         2. โปรดระบุระดับสมรรถนะรายบุคคลของลูกจ้างให้ครบถ้วน โดยพิจารณาจากตารางคำนิยามสมรรถนะด้านบน<br>
         3. ลูกจ้างต้องมีสมรรถนะครบถ้วนทุกประเด็นตามที่กำหนด (Bullet point) จึงจะถือว่าผ่านในระดับนั้นๆ<br>
         4. ลูกจ้างต้องมีสมรรถนะครบถ้วนทุกระดับก่อนหน้า จึงจะถือว่าผ่านในระดับที่สูงกว่า เช่น ระดับ 4 ต้องผ่าน ระดับ 2 และระดับ 3<br>
+        5. ลูกจ้างที่มีค่า Gap รวม เท่ากับ 0 หรือผลเป็นบวก หากต้องการพัฒนาเพิ่มเติมโปรดระบุ "วิธีการพัฒนา" และสิ่งที่ต้องการพัฒนาเพิมเติมในช่อง "ข้อเสนอแนะรายบุคคล" หากไม่ต้องการพัฒนาเพิ่มเติมโปรดระบุว่าเป็น Talent ในช่อง "วิธีการพัฒนา"<br>
       </div>
     </div>
   </div>
@@ -703,6 +727,8 @@
             <th colspan="2" class="comp-header">C4 · 20%<br>Business Mindset &amp; Growth Mindset</th>
             <th rowspan="2" style="width:80px">คะแนนรวม<br>(ถ่วงน้ำหนัก)</th>
             <th rowspan="2" style="width:80px">GAP รวม<br>(ถ่วงน้ำหนัก)</th>
+            <th rowspan="2" style="width:200px">วิธีการพัฒนา</th>
+            <th rowspan="2" style="min-width:210px">ข้อเสนอแนะรายบุคคล<br><span style="font-weight:400;font-size:10px;opacity:.75">(ถ้ามี)</span></th>
             <th rowspan="2" style="width:44px"></th>
           </tr>
           <tr>
@@ -768,6 +794,8 @@
   ══════════════════════════════════════════════════════ */
   const TARGET  = { 'เฉพาะกิจ': 2, 'ทั่วไป': 3, 'ประจำ': 4 };
   const WEIGHTS = { 1: 0.30, 2: 0.25, 3: 0.25, 4: 0.20 }; // C1..C4 ตามลำดับความสำคัญ
+  const SELF_DEV_METHODS = ['Assignment', 'Job Enlargement', 'Job Enrichment', 'Learning by doing', 'Mentoring', 'On the job training']; // 1.1–1.6 หน่วยงานดำเนินการเอง (1.7–1.8 กองพัฒนาบุคคลดำเนินการ)
+  const TALENT_OPTION_VALUE = 'Talent - ยังไม่ระบุแผนพัฒนาเพิ่มเติม';
 
   /* ═══════════════════════════════════════════════════════
      INIT
@@ -815,6 +843,22 @@
       `).join('')}
       <td><div class="gap-cell gap-na" id="wscore-${idx}">—</div></td>
       <td><div class="gap-cell gap-na" id="wgap-${idx}">—</div></td>
+      <td>
+        <select class="dev-sel" onchange="updateDevStatus(this)">
+          <option value="">— เลือกวิธีการพัฒนา —</option>
+          <option value="Assignment">Assignment (มอบหมายงานที่ท้าทายขึ้น)</option>
+          <option value="Job Enlargement">Job Enlargement (ขยายขอบเขตงานเพื่อเพิ่มความหลากหลาย)</option>
+          <option value="Job Enrichment">Job Enrichment (ขยายขอบเขตงานเพื่อความสามารถเชิงลึก)</option>
+          <option value="Learning by doing">Learning by doing (เรียนรู้จากการทำงานจริงด้วยตนเอง)</option>
+          <option value="Mentoring">Mentoring (พัฒนาโดยมีพี่เลี้ยงสอนงาน)</option>
+          <option value="On the job training">On the job training (เรียนรู้จากการทำงานจริง โดยมีแผน/ผู้ดูแล)</option>
+          <option value="E-learning">E-learning (เรียนรู้ผ่านระบบออนไลน์)</option>
+          <option value="Training">Training (เรียนรู้จากการอบรมในห้องเรียน)</option>
+          <option value="Talent - ยังไม่ระบุแผนพัฒนาเพิ่มเติม">⭐ Talent (ผ่านเป้าหมายแล้ว) — ยังไม่ระบุแผนพัฒนาเพิ่มเติม</option>
+        </select>
+        <div class="dev-status" id="devstatus-${idx}"></div>
+      </td>
+      <td><input type="text" placeholder="ข้อเสนอแนะเพิ่มเติม (ถ้ามี)" class="suggestion-input"></td>
       <td><button class="btn-del" onclick="delRow(this)" title="ลบแถวนี้">✕</button></td>
     `;
     tbody.appendChild(row);
@@ -844,6 +888,8 @@
       if (ws) ws.id = `wscore-${i+1}`;
       const wg = row.querySelector('[id^="wgap-"]');
       if (wg) wg.id = `wgap-${i+1}`;
+      const ds = row.querySelector('[id^="devstatus-"]');
+      if (ds) ds.id = `devstatus-${i+1}`;
     });
   }
 
@@ -858,6 +904,7 @@
 
     let weightedScore = 0;
     let allScored = true;
+    let allNonNegative = true;
 
     [1,2,3,4].forEach(c => {
       const selVal = row.querySelector(`.c${c}-sel`)?.value;
@@ -873,6 +920,7 @@
       const score = parseInt(selVal);
       weightedScore += score * WEIGHTS[c];
       const gap   = score - target;
+      if (gap < 0) allNonNegative = false;
       gCell.textContent = gap >= 0 ? `+${gap}` : `${gap}`;
       gCell.className   = `gap-cell ${gap > 0 ? 'gap-pos' : gap < 0 ? 'gap-neg' : 'gap-zero'}`;
     });
@@ -890,10 +938,39 @@
     }
 
     const wGap = weightedScore - target;
+    const isTalent = allNonNegative; // ทุกสมรรถนะผ่านหรือเกินเป้าหมาย (GAP ≥ 0 ทุกด้าน)
     wsCell.textContent = weightedScore.toFixed(2);
     wsCell.className   = 'gap-cell gap-zero';
-    wgCell.textContent = wGap >= 0.005 ? `+${wGap.toFixed(2)}` : wGap.toFixed(2);
+    const wGapText = wGap >= 0.005 ? `+${wGap.toFixed(2)}` : wGap.toFixed(2);
+    wgCell.innerHTML  = wGapText + (isTalent ? '<div class="talent-tag">⭐ Talent</div>' : '');
     wgCell.className   = `gap-cell ${wGap > 0.005 ? 'gap-pos' : wGap < -0.005 ? 'gap-neg' : 'gap-zero'}`;
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     DEV METHOD STATUS
+  ══════════════════════════════════════════════════════ */
+  function updateDevStatus(selectEl) {
+    const row     = selectEl.closest('tr');
+    const rowIdx  = row.querySelector('.row-num').textContent;
+    const statusEl = document.getElementById(`devstatus-${rowIdx}`);
+    if (!statusEl) return;
+
+    const val = selectEl.value;
+    if (!val) {
+      statusEl.textContent = '';
+      statusEl.className   = 'dev-status';
+      return;
+    }
+    if (val === TALENT_OPTION_VALUE) {
+      statusEl.textContent = '⭐ ไม่มีการดำเนินการพัฒนาเพิ่มเติมในรอบนี้ (Talent)';
+      statusEl.className   = 'dev-status dev-status-talent';
+    } else if (SELF_DEV_METHODS.includes(val)) {
+      statusEl.textContent = '🏢 หน่วยงานเป็นผู้ดำเนินการพัฒนาเอง';
+      statusEl.className   = 'dev-status dev-status-self';
+    } else {
+      statusEl.textContent = '🏛️ กองพัฒนาบุคคลเป็นผู้ดำเนินการพัฒนา';
+      statusEl.className   = 'dev-status dev-status-hr';
+    }
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -913,6 +990,35 @@
     el.classList.toggle('open');
     btn.textContent = el.classList.contains('open')
       ? '▲ ซ่อนนิยามสมรรถนะ' : '▼ ดู/ซ่อน นิยามสมรรถนะแต่ละระดับ';
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     VALIDATE ROWS
+  ══════════════════════════════════════════════════════ */
+  function validateRows() {
+    const rows = document.querySelectorAll('#empBody tr');
+    const errors = [];
+    let filledCount = 0;
+
+    rows.forEach((row) => {
+      const inputs  = row.querySelectorAll('input[type="text"]');
+      const selects = row.querySelectorAll('select');
+      const rowNum  = row.querySelector('.row-num').textContent;
+      const name    = inputs[0]?.value.trim();
+
+      if (!name) return; // แถวที่ยังไม่ได้กรอกชื่อ ถือว่าเป็นแถวว่าง ข้ามการตรวจสอบ
+      filledCount++;
+
+      if (!selects[0]?.value) errors.push(`แถวที่ ${rowNum} (${name}): ยังไม่ได้เลือกประเภทลูกจ้าง`);
+
+      [1,2,3,4].forEach(c => {
+        if (!selects[c]?.value) errors.push(`แถวที่ ${rowNum} (${name}): ยังไม่ได้ประเมินสมรรถนะ C${c}`);
+      });
+
+      if (!selects[5]?.value) errors.push(`แถวที่ ${rowNum} (${name}): ยังไม่ได้เลือกวิธีการพัฒนา`);
+    });
+
+    return { errors, filledCount };
   }
 
   /* ═══════════════════════════════════════════════════════
@@ -946,7 +1052,19 @@
         weightedGap   = Math.round((weightedScore - target) * 100) / 100;
       }
 
-      employees.push({ name, empType, scores, gaps, weightedScore, weightedGap });
+      const devMethod = selects[5]?.value || '';
+      let devStatus = '';
+      if (devMethod === TALENT_OPTION_VALUE) {
+        devStatus = 'ไม่มีการดำเนินการพัฒนาเพิ่มเติมในรอบนี้ (Talent)';
+      } else if (devMethod) {
+        devStatus = SELF_DEV_METHODS.includes(devMethod)
+          ? 'หน่วยงานเป็นผู้ดำเนินการพัฒนาเอง'
+          : 'กองพัฒนาบุคคลเป็นผู้ดำเนินการพัฒนา';
+      }
+      const suggestion = inputs[1]?.value.trim() || '';
+      const isTalent = gaps.length === 4 && gaps.every(g => g !== null && g >= 0);
+
+      employees.push({ name, empType, scores, gaps, weightedScore, weightedGap, devMethod, devStatus, suggestion, isTalent });
     });
 
     return { dept, assessor, employees };
@@ -965,10 +1083,16 @@
     if (!dept)     { showToast('กรุณาเลือกหน่วยงาน', 'error'); return; }
     if (!assessor) { showToast('กรุณากรอกชื่อผู้ประเมิน', 'error'); return; }
 
-    const { employees } = collectData();
-    if (employees.length === 0) {
+    const { errors, filledCount } = validateRows();
+    if (filledCount === 0) {
       showToast('กรุณากรอกข้อมูลพนักงานอย่างน้อย 1 คน', 'error'); return;
     }
+    if (errors.length > 0) {
+      showToast(errors[0] + (errors.length > 1 ? ` (และยังขาดอีก ${errors.length - 1} รายการ)` : ''), 'error');
+      return;
+    }
+
+    const { employees } = collectData();
 
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
