@@ -352,6 +352,18 @@
       margin-top: 4px;
       white-space: nowrap;
     }
+    .warning-tag {
+      display: inline-block;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #922B21;
+      background: #FDEDEC;
+      border: 1px solid #F1A9A0;
+      border-radius: 8px;
+      padding: 1px 6px;
+      margin-top: 4px;
+      white-space: nowrap;
+    }
 
     .row-num {
       text-align: center;
@@ -706,7 +718,6 @@
         2. โปรดระบุระดับสมรรถนะรายบุคคลของลูกจ้างให้ครบถ้วน โดยพิจารณาจากตารางคำนิยามสมรรถนะด้านบน<br>
         3. ลูกจ้างต้องมีสมรรถนะครบถ้วนทุกประเด็นตามที่กำหนด (Bullet point) จึงจะถือว่าผ่านในระดับนั้นๆ<br>
         4. ลูกจ้างต้องมีสมรรถนะครบถ้วนทุกระดับก่อนหน้า จึงจะถือว่าผ่านในระดับที่สูงกว่า เช่น ระดับ 4 ต้องผ่าน ระดับ 2 และระดับ 3<br>
-        5. ลูกจ้างที่มีค่า Gap รวม เท่ากับ 0 หรือผลเป็นบวก หากต้องการพัฒนาเพิ่มเติมโปรดระบุ "วิธีการพัฒนา" และสิ่งที่ต้องการพัฒนาเพิมเติมในช่อง "ข้อเสนอแนะรายบุคคล" หากไม่ต้องการพัฒนาเพิ่มเติมโปรดระบุว่าเป็น Talent ในช่อง "วิธีการพัฒนา"<br>
       </div>
     </div>
   </div>
@@ -785,7 +796,7 @@
   /* ═══════════════════════════════════════════════════════
      ⚙️  CONFIG — แก้ไขค่า URL ด้านล่างนี้หลัง Deploy GAS
   ══════════════════════════════════════════════════════ */
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyf5SPNrDTOYFQMzLG5qXo8xByQ23jdd4EAMeHshjKtFnzXQ2ciK2DBrNdg4ib9FzS0AA/exec';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzSMOiZBnE8ajGYcj-3ZEF4f1I5-DaZL79jJeIKMAOob7pxCCCgAvXJsm9Hn5UyGi0wHA/exec';
   const FORM_TYPE = 'CB';
   const MAX_ROWS  = 25;
 
@@ -939,10 +950,14 @@
 
     const wGap = weightedScore - target;
     const isTalent = allNonNegative; // ทุกสมรรถนะผ่านหรือเกินเป้าหมาย (GAP ≥ 0 ทุกด้าน)
+    const hasHiddenWeakSpot = !allNonNegative && wGap >= -0.005; // ยอดรวมดูผ่าน/เป็นบวก แต่จริงๆมีสมรรถนะที่ต่ำกว่าเป้าหมายซ่อนอยู่
     wsCell.textContent = weightedScore.toFixed(2);
     wsCell.className   = 'gap-cell gap-zero';
     const wGapText = wGap >= 0.005 ? `+${wGap.toFixed(2)}` : wGap.toFixed(2);
-    wgCell.innerHTML  = wGapText + (isTalent ? '<div class="talent-tag">⭐ Talent</div>' : '');
+    const tagHtml = isTalent
+      ? '<div class="talent-tag">⭐ Talent</div>'
+      : hasHiddenWeakSpot ? '<div class="warning-tag">⚠️ มีจุดต้องพัฒนา</div>' : '';
+    wgCell.innerHTML  = wGapText + tagHtml;
     wgCell.className   = `gap-cell ${wGap > 0.005 ? 'gap-pos' : wGap < -0.005 ? 'gap-neg' : 'gap-zero'}`;
   }
 
