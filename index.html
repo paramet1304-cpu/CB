@@ -2,6 +2,19 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
+  <script>
+    /* ── CACHE-BUSTING AUTO-RELOAD ─────────────────────────────
+       บังคับโหลดไฟล์ล่าสุดจาก Server ทุกครั้งที่เปิดแท็บใหม่
+       (ข้าม Cache ของ Browser และ CDN โดยอัตโนมัติ ไม่ต้องพึ่ง Ctrl+F5)
+    ═══════════════════════════════════════════════════════════ */
+    (function () {
+      var FLAG = 'vwCacheBusted_' + location.pathname;
+      if (!sessionStorage.getItem(FLAG)) {
+        sessionStorage.setItem(FLAG, '1');
+        location.replace(location.pathname + '?_cb=' + Date.now());
+      }
+    })();
+  </script>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
